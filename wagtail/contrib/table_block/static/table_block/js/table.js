@@ -1,5 +1,8 @@
 'use strict';
 
+// store initialized tables 
+var initTableList = [];
+
 function initTable(id, tableOptions) {
     var containerId = id + '-handsontable-container';
     var tableHeaderCheckboxId = id + '-handsontable-header';
@@ -164,6 +167,8 @@ function initTable(id, tableOptions) {
 
     hot = new Handsontable(document.getElementById(containerId), finalOptions);
     hot.render(); // Call to render removes 'null' literals from empty cells
+    
+    initTableList.push(id); // append the ID of this initialized table into the list
 
     // Apply resize after document is finished loading (parent .sequence-member-inner width is set)
     if ('resize' in $(window)) {

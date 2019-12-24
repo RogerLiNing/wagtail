@@ -31,4 +31,28 @@
 <br/>
 <div id="{{ widget.attrs.id }}-handsontable-container"></div>
 {% include 'django/forms/widgets/hidden.html' %}
-<script>initTable("{{ widget.attrs.id|escapejs }}", {{ widget.table_options_json|safe }});</script>
+<script>
+
+    // check if the given element is visible
+    function isScrolledIntoView(elem) {
+        var docViewTop = $(window).scrollTop();
+        var docViewBottom = docViewTop + $(window).height();
+
+        var elemTop = $(elem).offset().top;
+        var elemBottom = elemTop + $(elem).height();
+
+        return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+    }
+
+    // check if the handsontable-container is visible
+    // if it's visible and not in the `initTableList`
+    // then initializing the table
+    $(window).scroll(function () {
+       var element = $('#{{ widget.attrs.id }}-handsontable-container');
+        if(isScrolledIntoView(element)){
+            if (!initTableList.includes("{{ widget.attrs.id|escapejs }}")){
+                initTable("{{ widget.attrs.id|escapejs }}", {{ widget.table_options_json|safe }});
+            }
+    }
+});
+</script>
